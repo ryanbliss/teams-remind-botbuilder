@@ -39,8 +39,6 @@ export class SampleBot extends TeamsActivityHandler {
             await next();
         });
 
-        // Sends welcome messages to conversation mentions when they join the conversation.
-        // Messages are only sent to conversation mentions who aren't the bot.
         this.onMembersAdded(async (context, next) => {
             if (!context.activity.membersAdded) return;
             for (let idx = 0; idx < context.activity.membersAdded.length; idx++) {
@@ -53,12 +51,10 @@ export class SampleBot extends TeamsActivityHandler {
         });
 
         this.onInstallationUpdateAdd(async (context, next) => {
-            // Set conversation reference for proactive messaging
             this.conversationReferences.set(
                 context.activity.conversation.id,
                 TurnContext.getConversationReference(context.activity)
             );
-            // Send intro card
             await this.sendIntroCard(context);
 
             await next();
